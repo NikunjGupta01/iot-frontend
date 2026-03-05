@@ -123,7 +123,7 @@ function validateSetContactsParams(params) {
 
 /**
  * Validates SET_GEOFENCE command parameters
- * Requires: geofence_number, geofence_id, coordinates (array with min 3 points, closed polygon)
+ * Requires: geofence_number, geofence_id, coordinates (array with exactly 5 points)
  */
 function validateSetGeofenceParams(params) {
   // Check required fields
@@ -156,15 +156,15 @@ function validateSetGeofenceParams(params) {
     };
   }
   
-  // Validate minimum 3 coordinates
-  if (params.coordinates.length < 3) {
+  // Validate exactly 5 coordinates
+  if (params.coordinates.length !== 5) {
     return {
       valid: false,
-      error: 'coordinates must contain at least 3 points'
+      error: 'coordinates must contain exactly 5 points'
     };
   }
   
-  // Validate each coordinate has latitude and longitude
+  // Validate each coordinate has lat and lng (API format)
   for (let i = 0; i < params.coordinates.length; i++) {
     const coord = params.coordinates[i];
     
@@ -175,30 +175,20 @@ function validateSetGeofenceParams(params) {
       };
     }
     
-    if (!('latitude' in coord)) {
+    // Check for lat/lng (API format)
+    if (!('lat' in coord) && !('latitude' in coord)) {
       return {
         valid: false,
-        error: `coordinate at index ${i} must have latitude property`
+        error: `coordinate at index ${i} must have lat or latitude property`
       };
     }
     
-    if (!('longitude' in coord)) {
+    if (!('lng' in coord) && !('longitude' in coord)) {
       return {
         valid: false,
-        error: `coordinate at index ${i} must have longitude property`
+        error: `coordinate at index ${i} must have lng or longitude property`
       };
     }
-  }
-  
-  // Validate closed polygon (first and last coordinates match)
-  const first = params.coordinates[0];
-  const last = params.coordinates[params.coordinates.length - 1];
-  
-  if (first.latitude !== last.latitude || first.longitude !== last.longitude) {
-    return {
-      valid: false,
-      error: 'coordinates must form a closed polygon (first and last coordinates must match)'
-    };
   }
   
   return { valid: true };

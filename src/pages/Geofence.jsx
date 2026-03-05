@@ -207,17 +207,22 @@ export default function Geofence() {
     try {
       let geofenceCoordinates = [...customPoints];
       
-      // Auto-close the polygon if needed
-      const first = geofenceCoordinates[0];
-      const last = geofenceCoordinates[geofenceCoordinates.length - 1];
-      if (first.latitude !== last.latitude || first.longitude !== last.longitude) {
-        geofenceCoordinates.push({ ...first });
+      // Ensure exactly 5 coordinates
+      // Take only the first 5 coordinates if more are provided
+      if (geofenceCoordinates.length > 5) {
+        geofenceCoordinates = geofenceCoordinates.slice(0, 5);
       }
+
+      // Transform coordinates to API format (lat/lng instead of latitude/longitude)
+      const apiCoordinates = geofenceCoordinates.map(coord => ({
+        lat: coord.latitude,
+        lng: coord.longitude
+      }));
 
       await setGeofence(imei, {
         geofence_number: "GEO1",
         geofence_id: profileName,
-        coordinates: geofenceCoordinates
+        coordinates: apiCoordinates
       });
 
       if (isEditMode) {
