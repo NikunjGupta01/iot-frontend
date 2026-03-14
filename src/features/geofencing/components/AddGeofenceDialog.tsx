@@ -188,8 +188,8 @@ export function AddGeofenceDialog({
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[90vh] overflow-hidden p-0 sm:max-w-6xl">
+    <Dialog open={open} onOpenChange={onOpenChange} >
+      <DialogContent className="max-h-[90vh] overflow-hidden p-0 sm:max-w-6xl z-[999]">
         <div className="flex h-full max-h-[90vh] flex-col">
           <DialogHeader className="border-b px-6 py-4">
             <DialogTitle>Add Geofencing</DialogTitle>
