@@ -1,12 +1,14 @@
 import api from "@/lib/axios";
-import type { Device, DeviceTelemetry } from "@/types";
+import type { Device, DeviceOverview, AnalyticsHealth } from "@/types";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
-function useDeviceTelemetry(imei: string) {
-  const [deviceStatus, setDeviceTelemetry] = useState<DeviceTelemetry | null>(
+function useDeviceOverview(imei: string) {
+  const [deviceStatus, setDeviceOverview] = useState<DeviceOverview | null>(
     null,
   );
+  const [analyticsHealth, setAnalyticsHealth] = useState<AnalyticsHealth | null>(null);
+
   const [device, setDevice] = useState<Device | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -50,7 +52,7 @@ function useDeviceTelemetry(imei: string) {
       }
     };
 
-    const fetchTelemetry = async () => {
+    const fetchOverview = async () => {
       try {
         const res = await api.post("analytics/analytics-query", {
           query: `{
@@ -85,17 +87,27 @@ function useDeviceTelemetry(imei: string) {
               rawLowbatLimit
               type
             }
+            analyticsHealth(imei: "${imei}") {
+              gpsScore
+              movement
+              movementStats
+              temperatureHealthIndex
+              temperatureStatus
+            }
           }`,
         });
 
         if (res.data?.data?.latestAnalyticsData) {
-          setDeviceTelemetry(res.data.data.latestAnalyticsData);
+          setDeviceOverview(res.data.data.latestAnalyticsData);
           setError(null);
+        }
+        if (res.data?.data?.analyticsHealth) {
+          setAnalyticsHealth(res.data.data.analyticsHealth);
         }
       } catch (err) {
         const errorMessage =
-          err instanceof Error ? err.message : "Failed to fetch telemetry data";
-        console.error("Telemetry fetch failed", err);
+          err instanceof Error ? err.message : "Failed to fetch overview data";
+        console.error("Overview fetch failed", err);
         setError(errorMessage);
         if (isInitialLoad.current) {
           toast.error(errorMessage);
@@ -111,8 +123,8 @@ function useDeviceTelemetry(imei: string) {
         // 1️⃣ fetch device
         const deviceData = await fetchDeviceData();
 
-        // 2️⃣ fetch telemetry once immediately
-        await fetchTelemetry();
+        // 2️⃣ fetch overview once immediately
+        await fetchOverview();
 
         // 3️⃣ determine polling interval
         const interval =
@@ -121,18 +133,18 @@ function useDeviceTelemetry(imei: string) {
             : 5 * 60 * 1000;
 
         // 4️⃣ start polling
-        pollingRef.current = setInterval(fetchTelemetry, interval);
+        pollingRef.current = setInterval(fetchOverview, interval);
 
         if (isInitialLoad.current) {
-          toast.success("Device telemetry loaded successfully");
+          toast.success("Device overview loaded successfully");
           isInitialLoad.current = false;
         }
       } catch (err) {
-        console.error("Device telemetry init failed", err);
+        console.error("Device overview init failed", err);
         const errorMessage =
           err instanceof Error
             ? err.message
-            : "Failed to initialize device telemetry";
+            : "Failed to initialize device overview";
         setError(errorMessage);
       } finally {
         setIsLoading(false);
@@ -148,7 +160,7 @@ function useDeviceTelemetry(imei: string) {
     };
   }, [imei]);
 
-  return { deviceStatus, device, isLoading, error };
+  return { deviceStatus, device, analyticsHealth, isLoading, error };
 }
 
-export default useDeviceTelemetry;
+export default useDeviceOverview;

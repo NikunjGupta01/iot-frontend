@@ -1,14 +1,10 @@
-import { Badge } from "@/components/ui/badge";
+
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import {
-  Activity,
   Battery,
   MapPin,
   Move,
-  Navigation,
-  Satellite,
-  TrendingUp,
   Wifi,
 } from "lucide-react";
 import { MetricCard } from "./MetricCard";
@@ -19,9 +15,6 @@ interface MetricsGridProps {
   longitude: number;
   battery: number;
   signal: number;
-  satellites: number;
-  steps: number;
-  distance: string;
 }
 
 export function MetricsGrid({
@@ -30,9 +23,6 @@ export function MetricsGrid({
   longitude,
   battery,
   signal,
-  satellites,
-  steps,
-  distance,
 }: MetricsGridProps) {
   const getSignalStrength = (signal: number) => {
     if (signal >= 80) return 4;
@@ -50,7 +40,7 @@ export function MetricsGrid({
   // };
 
   return (
-    <div className="grid gap-4 md:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+    <div className="grid gap-4 md:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
       <MetricCard
         icon={Move}
         label="Movement"
@@ -112,30 +102,10 @@ export function MetricsGrid({
               />
             ))}
           </div>
-          <div className="flex items-center gap-2 text-xs">
-            <Satellite className="h-3.5 w-3.5" />
-            <span>{satellites} SAT</span>
-          </div>
         </div>
       </MetricCard>
 
-      <MetricCard
-        icon={Activity}
-        label="Activity"
-        value={steps.toLocaleString()}
-        unit="steps"
-        color="green"
-      >
-        <div className="mt-4 flex items-center justify-between border-t pt-3">
-          <div className="flex items-center gap-2 text-xs">
-            <Navigation className="h-3.5 w-3.5" />
-            <span>{distance} km today</span>
-          </div>
-          <Badge variant="outline" className="text-xs">
-            +12% <TrendingUp className="h-3 w-3 ml-1 inline" />
-          </Badge>
-        </div>
-      </MetricCard>
+
     </div>
   );
 }

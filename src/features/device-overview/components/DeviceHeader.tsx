@@ -6,13 +6,12 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import { Clock, Radio, RefreshCcw, Settings, Shield } from "lucide-react";
+import { Clock, Radio, RefreshCcw, Settings } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 
 interface DeviceHeaderProps {
   name: string;
   status: string;
-  currentMode: string;
   lastUpdate: string;
   onRefresh: () => void;
   refreshing: boolean;
@@ -21,7 +20,6 @@ interface DeviceHeaderProps {
 export function DeviceHeader({
   name,
   status,
-  currentMode,
   lastUpdate,
   onRefresh,
   refreshing,
@@ -43,7 +41,7 @@ export function DeviceHeader({
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-white/95 dark:bg-slate-950/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto px-4 py-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
@@ -53,7 +51,7 @@ export function DeviceHeader({
             <div>
               <div className="flex items-center gap-3">
                 <h1 className="text-xl font-bold tracking-tight md:text-2xl bg-gradient-to-r from-slate-900 to-slate-600 dark:from-slate-100 dark:to-slate-400 bg-clip-text text-transparent">
-                  Device Telemetry
+                  Device Overview
                 </h1>
                 <Badge
                   variant="outline"
@@ -84,10 +82,7 @@ export function DeviceHeader({
               <span className="text-sm font-medium">{status}</span>
             </div>
 
-            <Badge variant="secondary" className="px-3 py-1.5 gap-1.5">
-              <Shield className="h-3.5 w-3.5" />
-              {currentMode}
-            </Badge>
+
 
             <Tooltip>
               <TooltipTrigger asChild>

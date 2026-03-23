@@ -207,13 +207,13 @@ export default function DeviceStatusGrid() {
                 <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-transparent to-transparent blur-2xl" />
                 <div className="relative flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div className="space-y-1">
-                        <h2 className="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
+                        <h2 className="text-2xl font-bold tracking-tight text-foreground flex items-center gap-2">
                             Device Status
-                            <Badge variant="outline" className="ml-2 border-white/20 text-white/80">
+                            <Badge variant="outline" className="ml-2 border-border text-muted-foreground">
                                 Overview
                             </Badge>
                         </h2>
-                        <p className="text-sm text-gray-400">
+                        <p className="text-sm text-muted-foreground">
                             Real-time monitoring of all connected devices
                         </p>
                     </div>
@@ -288,33 +288,33 @@ export default function DeviceStatusGrid() {
 
             {/* Quick Stats Summary */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                <div className="bg-gray-900/50 backdrop-blur-sm rounded-xl border border-gray-800 p-4">
-                    <p className="text-xs text-gray-400">Total Incidents</p>
-                    <p className="text-2xl font-bold text-white mt-1">229</p>
+                <div className="bg-card backdrop-blur-sm rounded-xl border border-border p-4">
+                    <p className="text-xs text-muted-foreground">Total Incidents</p>
+                    <p className="text-2xl font-bold text-foreground mt-1">229</p>
                     <div className="flex items-center gap-1 mt-2">
                         <TrendingUp className="h-3 w-3 text-red-400" />
                         <span className="text-xs text-red-400">+12% from yesterday</span>
                     </div>
                 </div>
-                <div className="bg-gray-900/50 backdrop-blur-sm rounded-xl border border-gray-800 p-4">
-                    <p className="text-xs text-gray-400">Devices Online</p>
+                <div className="bg-card backdrop-blur-sm rounded-xl border border-border p-4">
+                    <p className="text-xs text-muted-foreground">Devices Online</p>
                     <p className="text-2xl font-bold text-green-400 mt-1">2/15</p>
                     <div className="flex items-center gap-1 mt-2">
                         <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                        <span className="text-xs text-gray-400">13% online</span>
+                        <span className="text-xs text-muted-foreground">13% online</span>
                     </div>
                 </div>
-                <div className="bg-gray-900/50 backdrop-blur-sm rounded-xl border border-gray-800 p-4">
-                    <p className="text-xs text-gray-400">Critical Issues</p>
+                <div className="bg-card backdrop-blur-sm rounded-xl border border-border p-4">
+                    <p className="text-xs text-muted-foreground">Critical Issues</p>
                     <p className="text-2xl font-bold text-red-400 mt-1">3</p>
                     <div className="flex items-center gap-1 mt-2">
                         <AlertTriangle className="h-3 w-3 text-red-400" />
                         <span className="text-xs text-red-400">Need attention</span>
                     </div>
                 </div>
-                <div className="bg-gray-900/50 backdrop-blur-sm rounded-xl border border-gray-800 p-4">
-                    <p className="text-xs text-gray-400">Last Updated</p>
-                    <p className="text-lg font-bold text-white mt-1">Just now</p>
+                <div className="bg-card backdrop-blur-sm rounded-xl border border-border p-4">
+                    <p className="text-xs text-muted-foreground">Last Updated</p>
+                    <p className="text-lg font-bold text-foreground mt-1">Just now</p>
                     <div className="flex items-center gap-1 mt-2">
                         <Activity className="h-3 w-3 text-green-400" />
                         <span className="text-xs text-green-400">Live sync</span>
@@ -323,9 +323,9 @@ export default function DeviceStatusGrid() {
             </div>
 
             {/* Legend with color coding */}
-            <div className="bg-gray-900/30 backdrop-blur-sm rounded-xl border border-gray-800 p-4">
+            <div className="bg-muted backdrop-blur-sm rounded-xl border border-border p-4">
                 <div className="flex flex-wrap items-center gap-4 text-sm">
-                    <span className="text-gray-400 font-medium">Status Legend:</span>
+                    <span className="text-muted-foreground font-medium">Status Legend:</span>
                     <div className="flex flex-wrap gap-4">
                         {[
                             { label: "Active", color: "bg-green-500" },
@@ -337,7 +337,7 @@ export default function DeviceStatusGrid() {
                         ].map((item) => (
                             <div key={item.label} className="flex items-center gap-1.5">
                                 <div className={cn("w-3 h-3 rounded-full", item.color)} />
-                                <span className="text-xs text-gray-300">{item.label}</span>
+                                <span className="text-xs text-muted-foreground">{item.label}</span>
                             </div>
                         ))}
                     </div>

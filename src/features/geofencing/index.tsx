@@ -26,6 +26,7 @@ export default function GeofencingPage() {
   const [isLoadingDevices, setIsLoadingDevices] = useState(true);
   const [selectedImei, setSelectedImei] = useState(routeImei ?? "");
   const [isAddGeofenceOpen, setIsAddGeofenceOpen] = useState(false);
+  const [focusedGeofenceId, setFocusedGeofenceId] = useState<string | null>(null);
   const {
     geofences: remoteGeofences,
     loading: geofenceCommandLoading,
@@ -37,6 +38,7 @@ export default function GeofencingPage() {
   useEffect(() => {
     setSelectedImei(routeImei ?? "");
     setIsAddGeofenceOpen(false);
+    setFocusedGeofenceId(null);
   }, [routeImei]);
 
   useEffect(() => {
@@ -76,7 +78,7 @@ export default function GeofencingPage() {
   const activeDeviceGeofences = useMemo(
     () =>
       remoteGeofences.map((geofence, index) => ({
-        id: geofence.id ?? geofence.geofence_number,
+        id: String(geofence.id ?? geofence.geofence_number),
         label: geofence.geofence_id,
         imei: selectedImei,
         color: GEOFENCE_COLORS[index % GEOFENCE_COLORS.length],
@@ -155,12 +157,15 @@ export default function GeofencingPage() {
             isAddingDisabled={!selectedImei || !canAddMoreGeofences}
             onAddGeofence={openAddGeofenceModal}
             onRemoveGeofence={removeGeofence}
+            focusedGeofenceId={focusedGeofenceId}
+            onGeofenceClick={(id: string) => setFocusedGeofenceId(id)}
           />
         </div>
 
         <CurrentGeofencesMap
           selectedImei={selectedImei}
           geofences={activeDeviceGeofences}
+          focusedGeofenceId={focusedGeofenceId}
         />
       </div>
 
