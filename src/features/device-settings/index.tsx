@@ -8,7 +8,10 @@ import { useParams } from "react-router-dom";
 import { toast } from "sonner";
 import { DeviceSettingsHeader } from "./components/DeviceSettingsHeader";
 import { DeviceSettingsTargetDeviceCard } from "./components/DeviceSettingsTargetDeviceCard";
-import { DeviceSettingsTabs } from "./components/DeviceSettingsTabs";
+import { AdvancedSettings } from "./components/AdvancedSettings";
+import { CommunicationSettings } from "./components/CommunicationSettings";
+import { IntervalsSettings } from "./components/IntervalsSettings";
+import { GeneralDeviceControls } from "./components/GeneralDeviceControls";
 
 export default function DeviceSettings() {
   const { imei: routeImei } = useParams();
@@ -52,8 +55,13 @@ export default function DeviceSettings() {
     };
   }, []);
 
+  const selectedDevice = useMemo(
+    () => devices.find((device) => device.imei === selectedImei) ?? null,
+    [devices, selectedImei],
+  );
+
   useEffect(() => {
-    if (!selectedImei) {
+    if (!selectedDevice?.topic) {
       setLatestSettings(null);
       return;
     }
@@ -63,7 +71,7 @@ export default function DeviceSettings() {
     const loadLatestSettings = async () => {
       try {
         setIsLoadingLatestSettings(true);
-        const response = await getLatestDeviceSettings(selectedImei);
+        const response = await getLatestDeviceSettings(selectedDevice.topic!);
         if (!isMounted) {
           return;
         }
@@ -86,12 +94,7 @@ export default function DeviceSettings() {
     return () => {
       isMounted = false;
     };
-  }, [selectedImei]);
-
-  const selectedDevice = useMemo(
-    () => devices.find((device) => device.imei === selectedImei) ?? null,
-    [devices, selectedImei],
-  );
+  }, [selectedDevice?.topic]);
 
   return (
     <div className="w-full bg-background">
@@ -105,11 +108,28 @@ export default function DeviceSettings() {
           isLoadingDevices={isLoadingDevices}
           onSelectImei={setSelectedImei}
         />
-        <DeviceSettingsTabs
-          selectedImei={selectedImei}
-          latestSettings={latestSettings}
-          isLoadingLatestSettings={isLoadingLatestSettings}
-        />
+        <GeneralDeviceControls selectedImei={selectedImei} />
+        
+        <div className="grid gap-8 lg:grid-cols-2 items-start">
+          <div className="flex flex-col gap-8 w-full">
+            <CommunicationSettings
+              selectedImei={selectedImei}
+              latestSettings={latestSettings}
+              isLoadingLatestSettings={isLoadingLatestSettings}
+            />
+          </div>
+
+          <div className="flex flex-col gap-8 w-full">
+            <IntervalsSettings
+              selectedImei={selectedImei}
+              latestSettings={latestSettings}
+            />
+          </div>
+        </div>
+
+        <div className="pb-8">
+          <AdvancedSettings />
+        </div>
       </div>
     </div>
   );

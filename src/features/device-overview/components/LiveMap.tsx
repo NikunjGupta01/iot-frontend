@@ -7,6 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 import {
   Tooltip,
   TooltipContent,
@@ -166,6 +167,7 @@ interface LiveMapProps {
   name: string;
   battery: number;
   lastUpdate: string;
+  geoid?: string | null;
 }
 
 export function LiveMap({
@@ -175,6 +177,7 @@ export function LiveMap({
   name,
   battery,
   lastUpdate,
+  geoid,
 }: LiveMapProps) {
   const [map, setMap] = useState<L.Map | null>(null);
   const [zoom, setZoom] = useState(14);
@@ -224,7 +227,7 @@ export function LiveMap({
         </div>
       </CardHeader>
       <CardContent className="p-0 relative">
-        <div className="w-full h-[500px] bg-slate-200 dark:bg-slate-800 relative">
+        <div className="w-full h-[350px] sm:h-[450px] md:h-[550px] bg-slate-200 dark:bg-slate-800 relative z-0">
           <MapContainer
             center={position}
             zoom={zoom}
@@ -268,8 +271,16 @@ export function LiveMap({
                     <p>
                       <span className="font-medium">Coordinates:</span>
                     </p>
-                    <p className="text-xs font-mono">
-                      {latitude.toFixed(6)}°N, {longitude.toFixed(6)}°E
+                    <p className="text-xs font-mono flex flex-col">
+                      <span>{latitude.toFixed(6)}°N, {longitude.toFixed(6)}°E</span>
+                      <span className={cn(
+                        "mt-1 px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider inline-block",
+                        geoid 
+                          ? "text-foreground" 
+                          : "bg-red-500/20 text-red-600 dark:text-red-400 border border-red-500/30 shadow-[0_0_10px_rgba(239,68,68,0.3)]"
+                      )}>
+                        GEOID: {geoid || "GPS error"}
+                      </span>
                     </p>
                   </div>
                 </div>
@@ -289,7 +300,7 @@ export function LiveMap({
         </div>
 
         {/* Location Info Overlay */}
-        <div className="absolute bottom-4 left-4 right-4 md:left-auto md:right-4 md:bottom-4 md:w-80 z-[1000]">
+        <div className="absolute bottom-4 left-4 right-4 md:left-auto md:right-6 md:bottom-6 md:w-80 z-[1000]">
           <Card className="bg-background/95 backdrop-blur shadow-lg border-0">
             <CardContent className="p-4">
               <div className="space-y-2">
@@ -310,6 +321,17 @@ export function LiveMap({
                     <p className="text-muted-foreground">Longitude</p>
                     <p className="font-mono font-medium">
                       {longitude.toFixed(6)}°E
+                    </p>
+                  </div>
+                  <div className="col-span-2 mt-1 border-t pt-1">
+                    <p className="text-muted-foreground">Geographic ID (GEOID)</p>
+                    <p className={cn(
+                      "font-mono font-bold text-sm tracking-tight px-2 py-1 rounded transition-all",
+                      !geoid 
+                        ? "bg-red-500/20 text-red-600 dark:text-red-400 border border-red-500/40 shadow-[0_0_12px_rgba(239,68,68,0.4)]"
+                        : "text-foreground"
+                    )}>
+                      {geoid || "GPS error"}
                     </p>
                   </div>
                   <div>

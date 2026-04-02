@@ -14,7 +14,7 @@ export default function AppLayout() {
 
                     {/* 🔥 FIX HERE */}
                     <SidebarInset className="flex-1 min-w-0 overflow-hidden">
-                        <main className="h-full w-full min-w-0 overflow-hidden p-4">
+                        <main className="h-full w-full min-w-0 overflow-x-hidden p-4">
                             <Outlet />
                         </main>
                     </SidebarInset>

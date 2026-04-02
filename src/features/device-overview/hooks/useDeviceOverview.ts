@@ -122,8 +122,10 @@ function useDeviceOverview(imei: string) {
 
         // fetch device settings
         try {
-          const settings = await getLatestDeviceSettings(imei);
-          setDeviceSettings(settings);
+          if (deviceData?.topic) {
+            const settings = await getLatestDeviceSettings(deviceData.topic);
+            setDeviceSettings(settings);
+          }
         } catch (settingsErr) {
           console.error("Failed to fetch device settings", settingsErr);
         }

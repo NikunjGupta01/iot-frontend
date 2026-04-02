@@ -9,6 +9,7 @@ import {
   MapPin,
   Move,
   Wifi,
+  Thermometer,
 } from "lucide-react";
 import { MetricCard } from "./MetricCard";
 
@@ -18,6 +19,8 @@ interface MetricsGridProps {
   longitude: number;
   battery: number;
   signal: number;
+  temperature: number;
+  geoid?: string | null;
 }
 
 // Custom pulse marker for the minimap
@@ -43,6 +46,8 @@ export function MetricsGrid({
   longitude,
   battery,
   signal,
+  temperature,
+  geoid,
 }: MetricsGridProps) {
   const getSignalStrength = (signal: number) => {
     if (signal >= 80) return 4;
@@ -60,7 +65,7 @@ export function MetricsGrid({
   // };
 
   return (
-    <div className="grid gap-4 md:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+    <div className="grid gap-4 md:gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
       <MetricCard
         icon={Move}
         label="Movement"
@@ -125,6 +130,21 @@ export function MetricsGrid({
         </div>
       </MetricCard>
 
+      <MetricCard
+        icon={Thermometer}
+        label="Temperature"
+        value={temperature}
+        unit="°C"
+        color="orange"
+      >
+        <div className="mt-4 space-y-2 border-t pt-3">
+          <p className="text-xs text-muted-foreground flex justify-between">
+             <span>Sensor Temp</span>
+             <span className="font-mono">{temperature.toFixed(2)} °C</span>
+          </p>
+        </div>
+      </MetricCard>
+
       <Card className="group hover:shadow-lg transition-all duration-300 overflow-hidden flex flex-col h-full min-h-[160px]">
         <CardContent className="p-0 flex-1 relative">
           <MapContainer
@@ -144,8 +164,16 @@ export function MetricsGrid({
               <MapPin className="h-3.5 w-3.5 text-green-500" />
               Live Location
             </div>
-            <div className="text-[10px] font-mono text-muted-foreground pl-5 tracking-tighter">
-              {latitude.toFixed(5)}°, {longitude.toFixed(5)}°
+            <div className="text-[10px] font-mono text-muted-foreground pl-5 tracking-tighter flex justify-between items-center w-full">
+              <span>{latitude.toFixed(5)}°, {longitude.toFixed(5)}°</span>
+              <span className={cn(
+                "px-1.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider transition-all duration-500",
+                geoid 
+                  ? "bg-muted/50 text-muted-foreground" 
+                  : "bg-red-500/20 text-red-600 dark:text-red-400 border border-red-500/50 shadow-[0_0_8px_rgba(239,68,68,0.4)]"
+              )}>
+                {geoid ? `GEO: ${geoid}` : "GPS error"}
+              </span>
             </div>
           </div>
         </CardContent>

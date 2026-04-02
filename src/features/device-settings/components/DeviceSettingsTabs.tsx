@@ -4,7 +4,6 @@ import { tabs } from "../constants";
 import { AdvancedSettings } from "./AdvancedSettings";
 import { CommunicationSettings } from "./CommunicationSettings";
 import { IntervalsSettings } from "./IntervalsSettings";
-import { ModesSettings } from "./ModesSettings";
 
 type DeviceSettingsTabsProps = {
   selectedImei: string;
@@ -48,9 +47,6 @@ export function DeviceSettingsTabs({
         />
         </TabsContent>
 
-        <TabsContent value="modes" className="m-0 space-y-6">
-        <ModesSettings selectedImei={selectedImei} />
-        </TabsContent>
 
         <TabsContent value="advanced" className="m-0 space-y-6">
         <AdvancedSettings />

@@ -1,5 +1,4 @@
-import { Button } from "@/components/ui/button";
-import { RotateCcw, Save } from "lucide-react";
+
 
 export function DeviceSettingsHeader() {
   return (
@@ -11,17 +10,6 @@ export function DeviceSettingsHeader() {
         </p>
       </div>
 
-      <div className="flex items-center gap-3">
-        <Button variant="outline" className="gap-2 hover:bg-red-400" disabled>
-          <RotateCcw size={16} />
-          Reset All
-        </Button>
-
-        <Button className="gap-2">
-          <Save size={16} />
-          Save Changes
-        </Button>
-      </div>
     </div>
   );
 }

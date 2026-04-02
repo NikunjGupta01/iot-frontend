@@ -18,38 +18,42 @@ export type LatestDeviceSettingsRecord = {
 };
 
 function extractLatestRecord(payload: unknown): LatestDeviceSettingsRecord | null {
-  if (Array.isArray(payload)) {
-    const first = payload[0];
-    return first && typeof first === "object"
-      ? (first as LatestDeviceSettingsRecord)
-      : null;
-  }
-
   if (!payload || typeof payload !== "object") {
     return null;
   }
 
-  const maybeWrapped = payload as { data?: unknown };
+  const maybeWrapped = payload as { data?: any };
+  const rawData = maybeWrapped.data || payload;
+  const target = Array.isArray(rawData) ? rawData[0] : rawData;
 
-  if (Array.isArray(maybeWrapped.data)) {
-    const first = maybeWrapped.data[0];
-    return first && typeof first === "object"
-      ? (first as LatestDeviceSettingsRecord)
-      : null;
+  if (!target || typeof target !== "object") {
+    return null;
   }
 
-  if (maybeWrapped.data && typeof maybeWrapped.data === "object") {
-    return maybeWrapped.data as LatestDeviceSettingsRecord;
-  }
-
-  return payload as LatestDeviceSettingsRecord;
+  // Safely map the new REST schema onto the legacy frontend struct.
+  return {
+    topic: target.topic,
+    imei: target.imei,
+    type: target.type || target.current_profile, 
+    device_timestamp: target.updated_at || target.created_at || target.device_timestamp,
+    raw_phonenum1: target.phone_num1 ?? target.raw_phonenum1,
+    raw_phonenum2: target.phone_num2 ?? target.raw_phonenum2,
+    raw_controlroomnum: target.control_room_num ?? target.raw_controlroomnum,
+    raw_NormalSendingInterval: target.normal_sending_interval ?? target.raw_NormalSendingInterval,
+    raw_SOSSendingInterval: target.sos_sending_interval ?? target.raw_SOSSendingInterval,
+    raw_NormalScanningInterval: target.normal_scanning_interval ?? target.raw_NormalScanningInterval,
+    raw_AirplaneInterval: target.airplane_interval ?? target.raw_AirplaneInterval,
+    raw_temperature: target.temperature_limit ?? target.raw_temperature,
+    raw_SpeedLimit: target.speed_limit ?? target.raw_SpeedLimit,
+    raw_LowbatLimit: target.lowbat_limit ?? target.raw_LowbatLimit,
+  } as LatestDeviceSettingsRecord;
 }
 
 export async function getLatestDeviceSettings(
-  imei: string,
+  topicStr: string,
 ): Promise<LatestDeviceSettingsRecord | null> {
-  const response = await api.get(`/${imei}/config-or-misc`, {
-    params: { limit: 1 },
+  const response = await api.get(`/setting/get`, {
+    params: { topic: topicStr },
   });
 
   return extractLatestRecord(response.data);
