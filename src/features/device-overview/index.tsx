@@ -74,7 +74,7 @@ export default function DeviceOverviewPage() {
 
   return (
     <TooltipProvider>
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-background transition-colors duration-500 pb-16">
         <DeviceHeader
           name={data.name}
           imei={data.imei}
@@ -84,7 +84,7 @@ export default function DeviceOverviewPage() {
           refreshing={refreshing}
         />
 
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+        <main className="relative z-20 space-y-6">
           <MetricsGrid
             speed={data.speed}
             latitude={data.latitude}
@@ -95,9 +95,15 @@ export default function DeviceOverviewPage() {
             geoid={data.geoid}
           />
 
-          <div className="grid gap-6 lg:grid-cols-12">
-            {/* Left Column - Main Content */}
-            <div className="lg:col-span-8 flex flex-col gap-6">
+          <div className="grid gap-8 lg:grid-cols-12 items-start">
+
+            {/* Left Column - Tactical Live Map */}
+            <div className="lg:col-span-8 flex flex-col gap-8">
+              <ActivityBreakdown
+                crawling={data.crawling}
+                stationary={data.stationary}
+                overspeeding={data.overspeeding}
+              />
               <LiveMap
                 latitude={data.latitude}
                 longitude={data.longitude}
@@ -107,12 +113,10 @@ export default function DeviceOverviewPage() {
                 lastUpdate={data.lastUpdate}
                 geoid={data.geoid}
               />
-
-
             </div>
 
-            {/* Right Column - Sidebar */}
-            <div className="lg:col-span-4 flex flex-col gap-6">
+            {/* Right Column - System Controls & Intelligence */}
+            <div className="lg:col-span-4 flex flex-col gap-8">
               <DeviceSettingsSummaryCard
                 normalInterval={data.settingsNormalInterval}
                 sosInterval={data.settingsSosInterval}
@@ -120,16 +124,28 @@ export default function DeviceOverviewPage() {
                 lowBattery={data.settingsLowBattery}
                 airplaneInterval={data.settingsAirplaneInterval}
               />
-              <ActivityBreakdown
-                crawling={data.crawling}
-                stationary={data.stationary}
-                overspeeding={data.overspeeding}
-              />
-              <NetworkPerformanceCard
-                gpsSignal={data.gpsSignal}
-                gpsSignalRaw={data.gpsSignalRaw}
-                signal={data.signal}
-              />
+
+              <div className="grid gap-8 sm:grid-cols-1">
+
+                <NetworkPerformanceCard
+                  gpsSignal={data.gpsSignal}
+                  gpsSignalRaw={data.gpsSignalRaw}
+                  signal={data.signal}
+                />
+                {/* Legacy Maintenance Layer */}
+                <div className="opacity-30 pointer-events-none grayscale hover:opacity-100 transition-opacity duration-700">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="h-px flex-1 bg-border" />
+                    <span className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground whitespace-nowrap">Legacy Performance Matrix</span>
+                    <div className="h-px flex-1 bg-border" />
+                  </div>
+                  <DeviceHealthCard
+                    performance={data.performance}
+                    dataInterval={data.dataInterval}
+                  />
+                </div>
+              </div>
+
               <GuardiansList
                 guardian1Phone={data.guardian1Phone}
                 guardian2Phone={data.guardian2Phone}
@@ -137,13 +153,7 @@ export default function DeviceOverviewPage() {
             </div>
           </div>
 
-          {/* Deprecated Performance Card (Disabled) */}
-          <div className="opacity-50 pointer-events-none grayscale">
-            <DeviceHealthCard
-              performance={data.performance}
-              dataInterval={data.dataInterval}
-            />
-          </div>
+
         </main>
       </div>
     </TooltipProvider>

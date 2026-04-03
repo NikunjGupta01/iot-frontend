@@ -11,11 +11,13 @@ import { Signal } from "lucide-react";
 interface NetworkPerformanceCardProps {
   gpsSignal: number;
   gpsSignalRaw?: string;
+  signal: number;
 }
 
 export function NetworkPerformanceCard({
   gpsSignal,
   gpsSignalRaw,
+  signal,
 }: NetworkPerformanceCardProps) {
   return (
     <Card className="relative">
