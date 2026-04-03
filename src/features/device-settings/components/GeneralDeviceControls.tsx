@@ -173,21 +173,13 @@ export function GeneralDeviceControls({
                 </div>
               </div>
             </div>
-            <div className="flex gap-2">
-              <Button 
-                size="sm" 
-                variant={isLedOn ? "outline" : "default"}
-                onClick={() => handleLedToggle(true)}
-              >
-                Switch On
-              </Button>
-              <Button 
-                size="sm" 
-                variant={!isLedOn ? "outline" : "default"}
-                onClick={() => handleLedToggle(false)}
-              >
-                Switch Off
-              </Button>
+            <div className="flex items-center justify-between pt-2">
+              <span className="text-xs text-muted-foreground font-medium italic">Toggle Status</span>
+              <Switch 
+                checked={isLedOn}
+                onCheckedChange={handleLedToggle}
+                className="data-[state=checked]:bg-blue-500"
+              />
             </div>
           </div>
         </div>
