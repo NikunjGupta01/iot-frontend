@@ -93,3 +93,13 @@ export async function updateLedStatus(payload: {
   const response = await api.post(`/setting/led-status`, payload);
   return response.data;
 }
+
+export async function updateDevicePhoneNumbers(payload: {
+  topic: string;
+  phonenum1: string;
+  phonenum2: string;
+  controlroomnum: string;
+}) {
+  const response = await api.post(`/setting/update-phones`, payload);
+  return response.data;
+}

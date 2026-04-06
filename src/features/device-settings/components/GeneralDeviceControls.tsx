@@ -90,12 +90,14 @@ export function GeneralDeviceControls({
 
   return (
     <Card className="border-primary/10 shadow-sm h-full flex flex-col">
-      <CardHeader className="pb-4">
-        <CardTitle className="flex items-center gap-2">
-          <Settings className="h-5 w-5 text-primary" />
-          General Controls
-        </CardTitle>
-        <CardDescription>Always visible primary device toggle commands</CardDescription>
+      <CardHeader className="pb-4 border-b border-primary/5 flex flex-row items-center justify-between space-y-0">
+        <div>
+          <CardTitle className="flex items-center gap-2">
+            <Settings className="h-5 w-5 text-primary" />
+            General Controls
+          </CardTitle>
+          <CardDescription>Always visible primary device toggle commands</CardDescription>
+        </div>
       </CardHeader>
 
       <CardContent>
@@ -130,12 +132,12 @@ export function GeneralDeviceControls({
                   <p className="font-medium">Airplane Mode</p>
                   <div className="flex items-center gap-1">
                     {isAirplaneEnabled ? (
-                       <CheckCircle2 className="h-3 w-3 text-orange-600" />
+                      <CheckCircle2 className="h-3 w-3 text-orange-600" />
                     ) : (
-                       <XCircle className="h-3 w-3 text-muted-foreground/50" />
+                      <XCircle className="h-3 w-3 text-muted-foreground/50" />
                     )}
                     <p className={`text-[10px] font-bold uppercase tracking-wider ${isAirplaneEnabled ? "text-orange-600" : "text-muted-foreground"}`}>
-                       {isAirplaneEnabled ? "Active" : "Inactive"}
+                      {isAirplaneEnabled ? "Active" : "Inactive"}
                     </p>
                   </div>
                 </div>
@@ -143,7 +145,7 @@ export function GeneralDeviceControls({
             </div>
             <div className="flex items-center justify-between pt-2">
               <span className="text-xs text-muted-foreground font-medium italic">Toggle Status</span>
-              <Switch 
+              <Switch
                 checked={isAirplaneEnabled}
                 onCheckedChange={handleAirplaneToggle}
                 className="data-[state=checked]:bg-orange-500"
@@ -162,12 +164,12 @@ export function GeneralDeviceControls({
                   <p className="font-medium">LED Status</p>
                   <div className="flex items-center gap-1">
                     {isLedOn ? (
-                       <CheckCircle2 className="h-3 w-3 text-blue-600" />
+                      <CheckCircle2 className="h-3 w-3 text-blue-600" />
                     ) : (
-                       <XCircle className="h-3 w-3 text-muted-foreground/50" />
+                      <XCircle className="h-3 w-3 text-muted-foreground/50" />
                     )}
                     <p className={`text-[10px] font-bold uppercase tracking-wider ${isLedOn ? "text-blue-600" : "text-muted-foreground"}`}>
-                       {isLedOn ? "Lit" : "Off"}
+                      {isLedOn ? "Lit" : "Off"}
                     </p>
                   </div>
                 </div>
@@ -175,7 +177,7 @@ export function GeneralDeviceControls({
             </div>
             <div className="flex items-center justify-between pt-2">
               <span className="text-xs text-muted-foreground font-medium italic">Toggle Status</span>
-              <Switch 
+              <Switch
                 checked={isLedOn}
                 onCheckedChange={handleLedToggle}
                 className="data-[state=checked]:bg-blue-500"

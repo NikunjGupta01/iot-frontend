@@ -13,6 +13,7 @@ import { CommunicationSettings } from "./components/CommunicationSettings";
 import { AmbientListeningCard } from "./components/AmbientListeningCard";
 import { IntervalsSettings } from "./components/IntervalsSettings";
 import { GeneralDeviceControls } from "./components/GeneralDeviceControls";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function DeviceSettings() {
   const { imei: routeImei } = useParams();
@@ -118,23 +119,37 @@ export default function DeviceSettings() {
            latestSettings={latestSettings} 
         />
         
-        <div className="grid gap-6 lg:grid-cols-2 lg:items-stretch">
-          <CommunicationSettings
-            selectedImei={selectedImei}
-            latestSettings={latestSettings}
-            isLoadingLatestSettings={isLoadingLatestSettings}
-          />
-          <IntervalsSettings
-            selectedImei={selectedImei}
-            latestSettings={latestSettings}
-          />
-        </div>
+        <Tabs defaultValue="intervals" className="w-full">
+          <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 bg-muted/50 h-auto p-1 gap-1">
+            <TabsTrigger value="intervals" className="py-2.5 font-bold data-[state=active]:shadow-md">Time & Alerts</TabsTrigger>
+            <TabsTrigger value="communication" className="py-2.5 font-bold data-[state=active]:shadow-md">Contacts</TabsTrigger>
+            <TabsTrigger value="ambient" className="py-2.5 font-bold data-[state=active]:shadow-md">Ambient Listening</TabsTrigger>
+            <TabsTrigger value="advanced" className="py-2.5 font-bold data-[state=active]:shadow-md">Advanced</TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="communication" className="mt-6">
+            <CommunicationSettings
+              selectedImei={selectedImei}
+              latestSettings={latestSettings}
+              isLoadingLatestSettings={isLoadingLatestSettings}
+            />
+          </TabsContent>
+          
+          <TabsContent value="intervals" className="mt-6">
+            <IntervalsSettings
+              selectedImei={selectedImei}
+              latestSettings={latestSettings}
+            />
+          </TabsContent>
 
-        <AdvancedSettings />
+          <TabsContent value="ambient" className="mt-6">
+            <AmbientListeningCard />
+          </TabsContent>
 
-        <div className="pb-6">
-          <AmbientListeningCard />
-        </div>
+          <TabsContent value="advanced" className="mt-6">
+            <AdvancedSettings />
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );

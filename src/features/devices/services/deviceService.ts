@@ -128,3 +128,14 @@ export async function getDeviceByTopic(topic: string): Promise<Device | null> {
 
   return normalizeDevice(data.deviceByTopic);
 }
+
+export async function toggleDeviceStatus(topic: string, isActive: boolean): Promise<void> {
+  const { data } = await api.post("/device/resync", {
+    topic,
+    is_active: isActive,
+  });
+
+  if (!data || data.status !== "success") {
+    throw new Error(data?.message || "Failed to toggle device status");
+  }
+}

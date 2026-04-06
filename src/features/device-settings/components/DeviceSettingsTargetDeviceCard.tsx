@@ -153,7 +153,7 @@ export function DeviceSettingsTargetDeviceCard({
                       Current Mode
                     </p>
                     <Badge variant="outline" className="text-orange-600 border-orange-500/30 bg-orange-500/5 font-bold px-2 py-0.5">
-                       {currentMode}
+                      {currentMode}
                     </Badge>
                   </div>
                 </>
